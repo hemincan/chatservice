@@ -1,11 +1,7 @@
 local skynet = require "skynet"
 local socket = require "skynet.socket"
-
-
-
-
-
 local config={}
+local CMD={}
 function CMD.open( conf )
 	config.port=conf.port
 	config.address=conf.address
@@ -13,14 +9,8 @@ function CMD.open( conf )
     local fd=socket.listen(config.address,tonumber(config.port))
 	socket.start(fd,function ( fd,addr )
 		skynet.error(addr,fd,"socket me!")
-        skynet.fork(function (  ){
-                local x = socket.readline(id)
-				skynet.error(x)
-				if not x then 
-					print("have closed")
-					break
-				end
-        })
+        local agent=skynet.newservice("useragent")
+		skynet.send(agent,"lua","startReceive",{address=addr,fd=fd})
 	end)	
 end
 skynet.start(function (  )

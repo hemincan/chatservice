@@ -4,7 +4,7 @@ local skynet = require "skynet"
 skynet.start(function()
 	skynet.error("Server start")
 	skynet.newservice("debug_console",8000)
-	local gate=skynet.newservice("gate")
+	local gate=skynet.newservice("gateservice")
 	skynet.call(gate,"lua","open",{
 		address="0.0.0.0",
 		port = 8050,
